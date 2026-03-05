@@ -47,12 +47,25 @@ set clipboard+=unnamedplus
 " （古いVim互換のため）PRIMARYも使うなら
 set clipboard+=unnamed
 
-" ===================== vim-plug（自動導入） =====================
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !mkdir -p ~/.vim/autoload ~/.vim/plugged
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall | source $MYVIMRC
+" vim-plugを自動導入、vim,nvim両対応
+let s:data_dir = has('nvim') ? stdpath('data') . '/site' : expand('~/.vim')
+
+if empty(glob(s:data_dir . '/autoload/plug.vim'))
+  if executable('curl')
+    silent execute '!curl -fLo ' . shellescape(s:data_dir . '/autoload/plug.vim') .
+          \ ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  elseif executable('wget')
+    " Ubuntu最小構成など curl 無しを吸収
+    silent execute '!wget -O ' . shellescape(s:data_dir . '/autoload/plug.vim') .
+          \ ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  else
+    echohl ErrorMsg
+    echom '[vim-plug] curl/wget not found; install one of them and restart Vim'
+    echohl None
+  endif
+
+  " 初回起動で同期インストール→vimrc再読込（公式の流れ）
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/plugged')
