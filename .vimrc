@@ -68,7 +68,9 @@ if empty(glob(s:data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-call plug#begin('~/.vim/plugged')
+" Plugins 
+call plug#begin(s:data_dir . '/plugged')
+
   Plug 'preservim/nerdtree'         " ファイルツリー
   Plug 'ctrlpvim/ctrlp.vim'         " ファジーファインダ
   Plug 'tpope/vim-surround'         " 囲み編集
@@ -77,9 +79,12 @@ call plug#begin('~/.vim/plugged')
   Plug 'itchyny/lightline.vim'      " 軽量ステータスライン
   Plug 'vim-syntastic/syntastic'    " 同期Lint（gcc/cc）
   Plug 'morhetz/gruvbox'            " 軽量配色
-  Plug 'rhysd/vim-clang-format'     " C/C++ 本格整形（clang-formatがある時）
-  Plug 'sbdchd/neoformat'           " ある言語のフォーマッタを一括起動（任意）
+  Plug 'rhysd/vim-clang-format'     " C/C++ 整形（clang-formatがある時）
+  Plug 'sbdchd/neoformat'           " フォーマッタ一括（任意）
+  Plug 'ojroques/vim-oscyank'       " OSC52でクリップボードへ
+
 call plug#end()
+
 " クリップボード非対応でもOSC52でコピーできる
 call plug#begin('~/.vim/plugged')
 Plug 'ojroques/vim-oscyank'
