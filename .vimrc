@@ -68,7 +68,7 @@ if empty(glob(s:data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Plugins 
+" Plugin 
 call plug#begin(s:data_dir . '/plugged')
 
   Plug 'preservim/nerdtree'         " ファイルツリー
