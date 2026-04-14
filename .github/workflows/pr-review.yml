@@ -37,7 +37,7 @@ jobs:
             nixpkgs#actionlint \
             nixpkgs#reviewdog \
             --command bash -euo pipefail -c '
-              actionlint -format "{{range .}}{{.Filepath}}:{{.Line}}:{{.Column}}: {{.Message}}{{\"\\n\"}}{{end}}" \
+              actionlint -no-color -oneline \
                 | reviewdog \
                     -efm="%f:%l:%c: %m" \
                     -name="actionlint" \
