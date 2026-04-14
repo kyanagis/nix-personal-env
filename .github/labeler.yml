@@ -1,0 +1,29 @@
+nix:
+  - changed-files:
+      - any-glob-to-any-file:
+          - flake.nix
+          - flake.lock
+          - modules/**/*.nix
+
+editor:
+  - changed-files:
+      - any-glob-to-any-file:
+          - modules/home/nvim/**
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - README.md
+          - nix_install.md
+          - .github/pull_request_template.md
+
+automation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
+
+bootstrap:
+  - changed-files:
+      - any-glob-to-any-file:
+          - bootstrap/**
+          - justfile

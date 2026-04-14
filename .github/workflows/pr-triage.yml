@@ -1,0 +1,103 @@
+name: PR Triage
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+      - ready_for_review
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: pr-triage-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v6
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: true
+
+  summary-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const marker = '<!-- codex-pr-automation-summary -->';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+
+            const topLevel = new Map();
+            for (const file of files) {
+              const segment = file.filename.split('/')[0];
+              topLevel.set(segment, (topLevel.get(segment) || 0) + 1);
+            }
+
+            const areaSummary = [...topLevel.entries()]
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 5)
+              .map(([name, count]) => `- \`${name}\`: ${count} file(s)`)
+              .join('\n') || '- no changed files detected';
+
+            const body = `${marker}
+            ## Automation summary
+
+            - Base branch: \`${pr.base.ref}\`
+            - Head branch: \`${pr.head.ref}\`
+            - Draft: ${pr.draft ? 'yes' : 'no'}
+            - Files changed: ${files.length}
+
+            ### Hot areas
+            ${areaSummary}
+
+            ### Automated checks
+            - `CI` runs flake validation, Home Manager builds, and repository linting
+            - `PR Review` posts automated review comments for workflow, shell, and typo issues
+            - `PR Triage` keeps labels in sync from changed paths
+            - `CODEOWNERS` requests repository ownership review automatically
+            `;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number: pr.number,
+              per_page: 100,
+            });
+
+            const previous = comments.find((comment) =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+
+            if (previous) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: previous.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: pr.number,
+                body,
+              });
+            }
