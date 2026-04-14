@@ -2,11 +2,13 @@
 let
   commonPackages = with pkgs; [
     age
+    bash-language-server
     bat
     bind
     binutils
     binwalk
     btop
+    clang-tools
     cmake
     curl
     eza
@@ -19,20 +21,26 @@ let
     jq
     just
     libressl.nc
+    lua-language-server
+    nil
     nmap
     nodejs_22
     openssl
     pnpm
     pkg-config
     python3
+    pyright
     radare2
     ripgrep
     rsync
     socat
     sops
+    stylua
     tree
+    typescript-language-server
     unzip
     uv
+    vscode-langservers-extracted
     wget
     whois
     wireshark-cli
@@ -151,6 +159,33 @@ in
       "side-by-side" = true;
       "syntax-theme" = "gruvbox-dark";
     };
+  };
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+    withRuby = false;
+    withPython3 = true;
+    plugins = [
+      pkgs.vimPlugins.plenary-nvim
+      pkgs.vimPlugins.telescope-nvim
+      pkgs.vimPlugins.nvim-lspconfig
+      pkgs.vimPlugins.nvim-cmp
+      pkgs.vimPlugins.cmp-nvim-lsp
+      pkgs.vimPlugins.cmp-buffer
+      pkgs.vimPlugins.cmp-path
+      pkgs.vimPlugins.luasnip
+      pkgs.vimPlugins.cmp_luasnip
+      pkgs.vimPlugins.friendly-snippets
+      pkgs.vimPlugins.nvim-autopairs
+      pkgs.vimPlugins.gitsigns-nvim
+      pkgs.vimPlugins.comment-nvim
+      pkgs.vimPlugins.gruvbox-nvim
+    ];
+    extraConfig = builtins.readFile ./nvim/init.vim;
   };
 
   programs.ssh = {
