@@ -23,7 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Run flake checks
         run: nix flake check path:.
 
@@ -39,7 +38,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Build Home Manager activation package
         run: nix build ".#homeConfigurations.${{ matrix.profile }}.activationPackage"
 
@@ -48,7 +46,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
       - name: Lint workflows, shell, and spelling
         run: |
           nix shell \
