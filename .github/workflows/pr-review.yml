@@ -1,0 +1,76 @@
+name: PR Review
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/**
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pr-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  automated-review:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - name: Review GitHub workflow files
+        run: |
+          nix shell \
+            nixpkgs#actionlint \
+            nixpkgs#reviewdog \
+            --command bash -euo pipefail -c '
+              actionlint -no-color -oneline \
+                | reviewdog \
+                    -efm="%f:%l:%c: %m" \
+                    -name="actionlint" \
+                    -reporter=github-pr-review \
+                    -filter-mode=file \
+                    -fail-level=warning
+            '
+      - name: Review bootstrap shell scripts
+        run: |
+          nix shell \
+            nixpkgs#shellcheck \
+            nixpkgs#reviewdog \
+            --command bash -euo pipefail -c '
+              if compgen -G "bootstrap/*.sh" > /dev/null; then
+                shellcheck -f gcc bootstrap/*.sh \
+                  | reviewdog \
+                      -efm="%f:%l:%c: %t%*[^:]: %m" \
+                      -name="shellcheck" \
+                      -reporter=github-pr-review \
+                      -filter-mode=file \
+                      -fail-level=warning
+              fi
+            '
+      - name: Review spelling issues
+        run: |
+          nix shell \
+            nixpkgs#typos \
+            nixpkgs#reviewdog \
+            --command bash -euo pipefail -c '
+              typos . \
+                | reviewdog \
+                    -f=typos \
+                    -name="typos" \
+                    -reporter=github-pr-review \
+                    -filter-mode=file \
+                    -fail-level=warning
+            '
