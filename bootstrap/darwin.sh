@@ -20,7 +20,7 @@ if ! command -v nix >/dev/null 2>&1 && [ ! -f "$nix_daemon_profile" ] && [ ! -f 
 fi
 
 if [ -f "$nix_daemon_profile" ]; then
-  # shellcheck disable=SC1091
+  # shellcheck disable=SC1090,SC1091
   . "$nix_daemon_profile"
 elif [ -f "$user_nix_profile" ]; then
   # shellcheck disable=SC1090,SC1091
