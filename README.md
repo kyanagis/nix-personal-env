@@ -4,6 +4,15 @@
 
 このリポジトリを使うと、shell、CLI ツール、Neovim、Node.js 周りをまとめて Nix で入れられます。普段の開発環境に加えて、`gh` も入るので GitHub 上の branch / PR 作業にもそのまま使えます。
 
+## Docs
+
+初心者向けの詳細ガイドは `docs/` に分けてあります。
+
+- [docs/README.md](docs/README.md)
+- [docs/overview.md](docs/overview.md)
+- [docs/commands.md](docs/commands.md)
+- [docs/adding-packages.md](docs/adding-packages.md)
+
 ## まず知っておくこと
 
 - WSL2 用の設定は `homeConfigurations.wsl`
@@ -86,6 +95,7 @@ cd settings
 ```
 
 必要なら Xcode Command Line Tools のインストールが始まります。
+このスクリプトは最後の `nix-darwin` 反映だけ内部で `sudo` を使うので、`sudo ./bootstrap/darwin.sh` では実行しません。
 
 ### 4. ターミナルを開き直す
 
@@ -128,12 +138,23 @@ darwin-rebuild switch --impure --flake path:.#mac
 
 ## この設定で入るもの
 
-- `zsh`, `git`, `tmux`, `direnv`, `fzf`
-- `neovim` と LSP / 補完 / Telescope
-- `node`, `npm`, `npx`, `pnpm`, `yarn`
-- `gh` と `git-lfs`
-- 開発用 CLI とセキュリティ調査向けの基本ツール
-- macOS では GNU userland
+- GNU userland と共通 CLI ベース
+- `git`, `gh`, `git-lfs`, `gnupg`, `just`, `ripgrep`, `fd`, `eza`, `bat`, `btop`
+- C/C++ / Go / Rust / Python / Node.js の実務向け toolchain
+- `nix`, `nil`, `nixd`, `nixpkgs-fmt`, `deadnix`, `statix`, `nix-tree`, `nix-output-monitor` を含む Nix 開発ツール
+- `docker`, `kubectl`, `kubectx`, `helm`, `helmfile`, `kustomize`, `k9s`, `stern`, `awscli2`, `ansible`, `opentofu` などの実務向け infra CLI
+- `postgresql`, `pgcli`, `mariadb.client`, `sqlite`, `httpie`, `grpcurl`, `protobuf`, `buf`
+- `pre-commit`, `actionlint`, `hadolint`, `ruff`, `markdownlint-cli`, `yamllint`
+- `binwalk`, `radare2`, `nmap`, `tcpdump`, `wireshark-cli`, `trivy` などの調査系 CLI
+
+## CI
+
+PR では GitHub Actions で次を自動実行します。
+
+- Linux の `flake check`
+- Linux / WSL の `home-manager build`
+- macOS の `nix-darwin build`
+- workflow / shell / typo の自動レビュー
 
 ## 注意
 

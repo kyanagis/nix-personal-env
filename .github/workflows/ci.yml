@@ -41,6 +41,15 @@ jobs:
       - name: Build Home Manager activation package
         run: nix build ".#homeConfigurations.${{ matrix.profile }}.activationPackage"
 
+  darwin-build:
+    name: nix-darwin (mac)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - name: Build nix-darwin system
+        run: nix build --impure ".#darwinConfigurations.mac.system"
+
   repo-lint:
     runs-on: ubuntu-latest
     steps:

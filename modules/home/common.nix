@@ -1,72 +1,154 @@
 { config, lib, pkgs, profile, ... }:
 let
-  commonPackages = with pkgs; [
-    age
+  corePackages = with pkgs; [
+    coreutils
+    findutils
+    gnugrep
+    gnused
+    gawk
+    gnutar
     bash-language-server
     bat
     bind
-    binutils
-    binwalk
     btop
-    clang-tools
-    cmake
     curl
     eza
     fd
     file
-    gcc
     gh
+    git
     git-lfs
-    gnumake
+    gnupg
     jq
+    jqp
     just
     libressl.nc
-    lua-language-server
-    nil
-    nmap
-    nodejs_22
-    openssl
-    pnpm
-    pkg-config
-    python3
-    pyright
-    radare2
     ripgrep
+    ripgrep-all
     rsync
     socat
-    sops
-    stylua
     tree
-    typescript-language-server
     unzip
-    uv
-    vscode-langservers-extracted
     wget
     whois
-    wireshark-cli
-    yarn
     yq
     zip
     zstd
   ];
+
+  buildPackages = with pkgs; [
+    (lib.hiPrio binutils)
+    buf
+    clang-tools
+    cmake
+    deadnix
+    delve
+    gcc
+    gnumake
+    go
+    gopls
+    grpcurl
+    lua-language-server
+    nix-output-monitor
+    nix-tree
+    nil
+    nixd
+    nixpkgs-fmt
+    pkg-config
+    protobuf
+    rust-analyzer
+    rustc
+    cargo
+    shellcheck
+    shfmt
+    statix
+    stylua
+    taplo
+    opentofu
+    terraform-ls
+  ];
+
+  languagePackages = with pkgs; [
+    nodejs_22
+    pipx
+    pixi
+    pnpm
+    pre-commit
+    pyright
+    python3
+    ruff
+    typescript-language-server
+    uv
+    vscode-langservers-extracted
+    yarn
+  ];
+
+  infraPackages = with pkgs; [
+    actionlint
+    ansible
+    ansible-lint
+    awscli2
+    docker-client
+    docker-compose
+    hadolint
+    helmfile
+    k9s
+    kubectl
+    kubectx
+    kubernetes-helm
+    kustomize
+    stern
+    trivy
+  ];
+
+  dataPackages = with pkgs; [
+    httpie
+    mariadb.client
+    openssl
+    pgcli
+    postgresql
+    sqlite
+  ];
+
+  docsPackages = with pkgs; [
+    graphviz
+    markdownlint-cli
+    marksman
+    pandoc
+    yamllint
+  ];
+
+  securityPackages = with pkgs; [
+    age
+    binwalk
+    mtr
+    nmap
+    radare2
+    sops
+    tcpdump
+    usbutils
+    wireshark-cli
+  ];
+
+  commonPackages =
+    corePackages
+    ++ buildPackages
+    ++ languagePackages
+    ++ infraPackages
+    ++ dataPackages
+    ++ docsPackages
+    ++ securityPackages;
 
   linuxPackages = with pkgs; [
     gdb
     ltrace
     patchelf
     strace
-    tcpdump
   ];
 
   darwinPackages = with pkgs; [
-    coreutils
-    findutils
-    gawk
-    gnugrep
-    gnused
-    gnutar
+    iproute2mac
     lldb
-    tcpdump
   ];
 
   linuxZshHandoff = ''
@@ -133,6 +215,12 @@ in
   };
 
   programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+  };
+
+  programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
