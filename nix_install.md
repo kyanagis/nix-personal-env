@@ -69,6 +69,7 @@ cd settings
 ```
 
 必要なら Xcode Command Line Tools のインストールが始まります。
+このスクリプトは最後の `nix-darwin` 反映だけ内部で `sudo` を使うので、`sudo ./bootstrap/darwin.sh` では実行しません。
 
 ### 3. 新しいターミナルを開く
 
