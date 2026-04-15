@@ -102,6 +102,7 @@ just switch-mac
 何をするか:
 
 - build した設定を現在の環境へ反映する
+- macOS では内部で `sudo` を使って system activation まで行う
 
 build と違って、こちらは実際に shell 設定や package の見え方が変わります。
 
@@ -150,7 +151,7 @@ home-manager switch --impure --flake path:.#wsl
 
 ```bash
 darwin-rebuild build --impure --flake path:.#mac
-darwin-rebuild switch --impure --flake path:.#mac
+sudo HOME=/var/root darwin-rebuild switch --impure --flake path:.#mac
 ```
 
 ## `build` と `switch` の違い

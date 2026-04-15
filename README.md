@@ -134,7 +134,7 @@ just switch-mac
 ```bash
 home-manager switch --impure --flake path:.#wsl
 home-manager switch --impure --flake path:.#linux
-darwin-rebuild switch --impure --flake path:.#mac
+sudo HOME=/var/root darwin-rebuild switch --impure --flake path:.#mac
 ```
 
 ## この設定で入るもの

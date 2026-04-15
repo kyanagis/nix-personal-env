@@ -16,7 +16,7 @@ switch-linux:
   home-manager switch --impure --flake path:.#linux
 
 switch-mac:
-  darwin-rebuild switch --impure --flake path:.#mac
+  sudo HOME=/var/root darwin-rebuild switch --impure --flake path:.#mac
 
 build-wsl:
   home-manager build --impure --flake path:.#wsl
