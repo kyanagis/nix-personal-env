@@ -1,5 +1,3 @@
-AI最高やで!?!?!?!?!?
-
 # nix-personal-env
 
 WSL / Linux / macOS を Nix flakes, Home Manager, nix-darwin で揃える個人用開発環境です。
