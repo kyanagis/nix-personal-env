@@ -258,19 +258,11 @@ in
     withRuby = false;
     withPython3 = true;
     plugins = [
-      pkgs.vimPlugins.plenary-nvim
-      pkgs.vimPlugins.telescope-nvim
       pkgs.vimPlugins.nvim-lspconfig
       pkgs.vimPlugins.nvim-cmp
       pkgs.vimPlugins.cmp-nvim-lsp
-      pkgs.vimPlugins.cmp-buffer
       pkgs.vimPlugins.cmp-path
-      pkgs.vimPlugins.luasnip
-      pkgs.vimPlugins.cmp_luasnip
-      pkgs.vimPlugins.friendly-snippets
       pkgs.vimPlugins.nvim-autopairs
-      pkgs.vimPlugins.gitsigns-nvim
-      pkgs.vimPlugins.comment-nvim
       pkgs.vimPlugins.gruvbox-nvim
     ];
     extraConfig = builtins.readFile ./nvim/init.vim;
