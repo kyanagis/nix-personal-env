@@ -12,6 +12,7 @@
 - [docs/overview.md](docs/overview.md)
 - [docs/commands.md](docs/commands.md)
 - [docs/adding-packages.md](docs/adding-packages.md)
+- [docs/package-inventory.md](docs/package-inventory.md)
 
 ## まず知っておくこと
 
@@ -137,6 +138,8 @@ darwin-rebuild switch --impure --flake path:.#mac
 ```
 
 ## この設定で入るもの
+
+完全な package / program 一覧は [docs/package-inventory.md](docs/package-inventory.md) にまとめています。
 
 - GNU userland と共通 CLI ベース
 - `git`, `gh`, `git-lfs`, `gnupg`, `just`, `ripgrep`, `fd`, `eza`, `bat`, `btop`
