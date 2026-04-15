@@ -26,9 +26,13 @@
         in
           if value != "" then value else fallback;
 
-      resolvedUser = envOr "USER" "nixuser";
-      linuxHomeDirectory = envOr "HOME" "/home/${resolvedUser}";
-      darwinHomeDirectory = envOr "HOME" "/Users/${resolvedUser}";
+      sudoUser = builtins.getEnv "SUDO_USER";
+      resolvedUser =
+        if sudoUser != "" then sudoUser else envOr "USER" "nixuser";
+      linuxHomeDirectory =
+        if sudoUser != "" then "/home/${resolvedUser}" else envOr "HOME" "/home/${resolvedUser}";
+      darwinHomeDirectory =
+        if sudoUser != "" then "/Users/${resolvedUser}" else envOr "HOME" "/Users/${resolvedUser}";
 
       mkPkgs = system:
         import nixpkgs {
@@ -76,6 +80,7 @@
           ./modules/darwin/system.nix
           home-manager.darwinModules.home-manager
           {
+            home-manager.backupFileExtension = "pre-hm";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
@@ -92,6 +97,10 @@
       checks.${linuxSystem} = {
         home-wsl = self.homeConfigurations.wsl.activationPackage;
         home-linux = self.homeConfigurations.linux.activationPackage;
+      };
+
+      checks.${darwinSystem} = {
+        darwin-system = self.darwinConfigurations.mac.system;
       };
 
       formatter.${linuxSystem} = (mkPkgs linuxSystem).nixpkgs-fmt;
