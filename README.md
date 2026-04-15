@@ -1,6 +1,6 @@
-# Nix-settings
+# nix-personal-env
 
-`nix flake` + `home-manager` + `nix-darwin` で、WSL2 Debian / Linux / Apple Silicon macOS をそろえるための設定リポジトリです。
+WSL / Linux / macOS を Nix flakes, Home Manager, nix-darwin で揃える個人用開発環境です。
 
 このリポジトリを使うと、shell、CLI ツール、Neovim、Node.js 周りをまとめて Nix で入れられます。普段の開発環境に加えて、`gh` も入るので GitHub 上の branch / PR 作業にもそのまま使えます。
 
@@ -42,8 +42,8 @@ sudo apt-get install -y git
 
 ```bash
 cd ~
-git clone git@github.com:kyanagis/Nix-settings.git settings
-cd settings
+git clone git@github.com:kyanagis/nix-personal-env.git
+cd nix-personal-env
 ```
 
 ### 4. bootstrap を実行する
@@ -85,8 +85,8 @@ Apple Silicon の macOS を前提にしています。
 
 ```bash
 cd ~
-git clone git@github.com:kyanagis/Nix-settings.git settings
-cd settings
+git clone git@github.com:kyanagis/nix-personal-env.git
+cd nix-personal-env
 ```
 
 ### 3. bootstrap を実行する
