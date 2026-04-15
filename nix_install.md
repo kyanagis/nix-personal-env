@@ -25,8 +25,8 @@ sudo apt-get install -y git
 
 ```bash
 cd ~
-git clone git@github.com:kyanagis/Nix-settings.git settings
-cd settings
+git clone git@github.com:kyanagis/nix-personal-env.git
+cd nix-personal-env
 ```
 
 ### 3. bootstrap を実行する
@@ -58,8 +58,8 @@ gh --version
 
 ```bash
 cd ~
-git clone git@github.com:kyanagis/Nix-settings.git settings
-cd settings
+git clone git@github.com:kyanagis/nix-personal-env.git
+cd nix-personal-env
 ```
 
 ### 2. bootstrap を実行する
